@@ -24,3 +24,4 @@ def canUnlockAll(boxes):
                     changed = True
 
     return all(unlocked)
+    
