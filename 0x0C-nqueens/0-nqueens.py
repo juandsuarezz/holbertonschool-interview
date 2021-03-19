@@ -92,4 +92,3 @@ if __name__ == "__main__":
     # initialized the board[n][n] depends on the getting number
     board = [[0 for i in range(n)] for j in range(n)]
     solveNQUtil(board, 0, n)
-    
