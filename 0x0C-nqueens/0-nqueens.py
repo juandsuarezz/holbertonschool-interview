@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 """This module has functions for the infamous N-queens problem"""
 import sys
 
