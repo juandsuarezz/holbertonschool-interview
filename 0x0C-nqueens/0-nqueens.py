@@ -1,91 +1,94 @@
 #!/usr/bin/python3
 """
-N Queens
+N queens algorithm
 """
+
 import sys
 
 
-if len(sys.argv) != 2:
-    print('Usage: nqueens N')
-    exit(1)
-N = sys.argv[1]
-try:
-    N = int(N)
-
-except:
-    print('N must be a number')
-    exit(1)
-
-if N < 4:
-    print('N must be at least 4')
-    exit(1)
-
-k = 1
-
-
 def printSolution(board):
+    """print the coordinates row and column for the position of
+       each N queen in the posible solution
+    Arg:
+       - board: matrix[n][n], list of list
     """
-    print Solution
-    """
-    queens = []
-    global k
-    k = k + 1
-    for i in range(N):
-        for j in range(N):
+    formatted_output = []
+    for i in range(len(board)):
+        for j in range(len(board)):
             if board[i][j] == 1:
-                queens.append([i, j])
-    print(queens)
+                formatted_output.append([i, j])
+    print(formatted_output)
 
 
-def isSafe(board, row, col):
-    """
-    isSafe
+def isSafe(board, row, col, n):
+    """checking if a queen can be placed on board[row][col]
+    Arg:
+       - board: matrix[n][n], list of list
+       - row: position i to check
+       - col: position j to check
+       - n: number of queens to placed
+    Return: True or False
+       - True: if the queen coulb be placed, save place
+       - False: if there is not a save place
     """
     for i in range(col):
-        if board[row][i]:
+        if board[row][i] == 1:
             return False
-    i = row
-    j = col
-    while i >= 0 and j >= 0:
-        if board[i][j]:
+    for i, j in zip(range(row, -1, -1),
+                    range(col, -1, -1)):
+        if board[i][j] == 1:
             return False
-        i -= 1
-        j -= 1
-    i = row
-    j = col
-    while j >= 0 and i < N:
-        if board[i][j]:
+    for i, j in zip(range(row, n, 1),
+                    range(col, -1, -1)):
+        if board[i][j] == 1:
             return False
-        i = i + 1
-        j = j - 1
+
     return True
 
 
-def solveNQUtil(board, col):
+def solveNQUtil(board, col, n):
     """
-    solve NQtil
+    Solves the N queen problem using Backtracking
+    Arg:
+       - board: list of list of size board[n][n] where n is the num of queens
+       - col: check from column 0 until n and check if it's right to place
+a queen there.
+       - n: number of queens to be placed
+    Return:
+       - True: if all the queens are placed on the board
+       - False: if a queen can not be placed
     """
-    if col == N:
+    if col == n:
         printSolution(board)
         return True
-    res = False
-    for i in range(N):
-        if isSafe(board, i, col):
+
+    counter = False
+    for i in range(n):
+        if isSafe(board, i, col, n):
             board[i][col] = 1
-            res = solveNQUtil(board, col + 1) or res
+            counter = solveNQUtil(board, col + 1, n) or counter
             board[i][col] = 0
-    return res
+    return counter
 
 
-def solveNQ():
+if __name__ == "__main__":
     """
-    solve NQ
+    Take the arguments from the command line
+    - nqueens N, where N is the number of queens to be placed
     """
-    board = [[0 for j in range(N)] for i in range(N)]
-    if solveNQUtil(board, 0) is False:
-        pass
-        return
-    return
+    if not len(sys.argv) == 2:
+        print("Usage: nqueens N")
+        sys.exit(1)
 
+    if not (sys.argv[1]).isdigit():
+        print("N must be a number")
+        sys.exit(1)
 
-solveNQ()
+    n = int(sys.argv[1])
+    if n < 4:
+        print("N must be at least 4")
+        sys.exit(1)
+
+    # initialized the board[n][n] depends on the getting number
+    board = [[0 for i in range(n)] for j in range(n)]
+    solveNQUtil(board, 0, n)
