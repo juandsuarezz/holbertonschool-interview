@@ -1,68 +1,91 @@
 #!/usr/bin/python3
-"""This module has functions for the infamous N-queens problem"""
+"""
+N Queens
+"""
 import sys
 
 
-def checkPos(board, pos):
-    """Function to check if a position is valid for a queen"""
-    for x in range(pos[0]):
-        if board[x][pos[1]] == 1:
-            return False
+if len(sys.argv) != 2:
+    print('Usage: nqueens N')
+    exit(1)
+N = sys.argv[1]
+try:
+    N = int(N)
 
-    for x, y in zip(range(pos[0], -1, -1), range(pos[1], -1, -1)):
-        if board[x][y] == 1:
-            return False
+except:
+    print('N must be a number')
+    exit(1)
 
-    for x, y in zip(range(pos[0], -1, -1), range(pos[1], len(board), 1)):
-        if board[x][y] == 1:
-            return False
+if N < 4:
+    print('N must be at least 4')
+    exit(1)
 
+k = 1
+
+
+def printSolution(board):
+    """
+    print Solution
+    """
+    queens = []
+    global k
+    k = k + 1
+    for i in range(N):
+        for j in range(N):
+            if board[i][j] == 1:
+                queens.append([i, j])
+    print(queens)
+
+
+def isSafe(board, row, col):
+    """
+    isSafe
+    """
+    for i in range(col):
+        if board[row][i]:
+            return False
+    i = row
+    j = col
+    while i >= 0 and j >= 0:
+        if board[i][j]:
+            return False
+        i -= 1
+        j -= 1
+    i = row
+    j = col
+    while j >= 0 and i < N:
+        if board[i][j]:
+            return False
+        i = i + 1
+        j = j - 1
     return True
 
 
-def nqueens(board, row, solutions):
-    """Recursive function to try board layouts"""
-    if row == len(board):
-        solutions.append(conv(board))
-
-    for x in range(len(board)):
-        if checkPos(board, (row, x)) is True:
-            board[row][x] = 1
-            nqueens(board, row + 1, solutions)
-            board[row][x] = 0
-
-
-def conv(sol):
-    """Function to convert styles of board descriptions"""
-    fin = []
-    for x in range(len(sol)):
-        fin.append([])
-        fin[x].append(x)
-        for y in range(len(sol)):
-            if sol[x][y] == 1:
-                fin[x].append(y)
-                break
-    return fin
+def solveNQUtil(board, col):
+    """
+    solve NQtil
+    """
+    if col == N:
+        printSolution(board)
+        return True
+    res = False
+    for i in range(N):
+        if isSafe(board, i, col):
+            board[i][col] = 1
+            res = solveNQUtil(board, col + 1) or res
+            board[i][col] = 0
+    return res
 
 
-def main():
-    """Main function to check args and call recursion"""
-    if len(sys.argv) != 2:
-        print("Usage: nqueens N")
-        sys.exit(1)
-    try:
-        num = int(sys.argv[1])
-    except ValueError:
-        print("N must be a number")
-        sys.exit(1)
-    if num < 4:
-        print("N must be at least 4")
-        sys.exit(1)
-    board = [[0] * num for x in range(num)]
-    sols = []
-    nqueens(board, 0, sols)
-    for x in sols:
-        print(x)
+def solveNQ():
+    """
+    solve NQ
+    """
+    board = [[0 for j in range(N)] for i in range(N)]
+    if solveNQUtil(board, 0) is False:
+        pass
+        return
+    return
 
-if __name__ == "__main__":
-    main()
+
+solveNQ()
