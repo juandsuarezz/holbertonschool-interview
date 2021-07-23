@@ -74,7 +74,7 @@ a queen there.
 if __name__ == "__main__":
     """
     Take the arguments from the command line
-    - nqueens N, where N is the number of queens to be placed
+    - nqueens git, where N is the number of queens to be placed
     """
     if not len(sys.argv) == 2:
         print("Usage: nqueens N")
